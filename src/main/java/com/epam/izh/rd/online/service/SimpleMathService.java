@@ -1,9 +1,5 @@
 package com.epam.izh.rd.online.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class SimpleMathService implements MathService {
 
     /**
@@ -17,7 +13,11 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int compare(int value1, int value2) {
-        return Integer.compare(value1, value2);
+        if (value1 == value2) {
+            return 0;
+        } else if (value1 < value2) {
+            return -1;
+        } else return 1;
     }
 
     /**
@@ -26,7 +26,7 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int maxFrom(int value1, int value2) {
-        return Math.max(value1, value2);
+        return value1 > value2 ? value1 : value2;
     }
 
     /**
@@ -35,11 +35,13 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int maxFrom(int[] values) {
-        List<Integer> list = new ArrayList<>();
+        int max = values[0];
         for (int value : values) {
-            list.add(value);
+            if (value > max) {
+                max = value;
+            }
         }
-        return Collections.max(list);
+        return max;
     }
 
     /**
@@ -61,17 +63,20 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int[] getEvenDigits(int[] values) {
-        List<Integer> list = new ArrayList<>();
+        int evenCounter = 0;
         for (int value : values) {
             if (value % 2 == 0) {
-                list.add(value);
+                evenCounter++;
             }
         }
-        int[] array = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            array[i] = list.get(i);
+        int[] result = new int[evenCounter];
+        int i = 0;
+        for (int value : values) {
+            if (value % 2 == 0) {
+                result[i++] = value;
+            }
         }
-        return array;
+        return result;
     }
 
     /**
@@ -114,13 +119,14 @@ public class SimpleMathService implements MathService {
      */
     @Override
     public int[] sort(int[] values) {
-        List<Integer> list = new ArrayList<>();
-        for (int value : values) {
-            list.add(value);
-        }
-        Collections.sort(list);
-        for (int i = 0; i < list.size(); i++) {
-            values[i] = list.get(i);
+        for (int i = 0; i < values.length - 1; i++) {
+            for (int j = 0; j < values.length - i - 1; j++) {
+                if (values[j] > values[j + 1]) {
+                    int buffer = values[j];
+                    values[j] = values[j + 1];
+                    values[j + 1] = buffer;
+                }
+            }
         }
         return values;
     }
